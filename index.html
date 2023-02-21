@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My Stylish Form</title>
+	<style>
+		body {
+		
+			background-size: cover;
+			font-family: Arial, sans-serif;
+			color: #fff;
+		}
+		form {
+			background-color: rgba(0,0,0,0.7);
+			padding: 20px;
+			border-radius: 10px;
+			max-width: 500px;
+			margin: auto;
+		}
+		h1 {
+			text-align: center;
+		}
+		label {
+			display: block;
+			margin-bottom: 10px;
+		}
+		input[type="text"],
+		input[type="email"],
+		textarea {
+			padding: 10px;
+			font-size: 16px;
+			border-radius: 5px;
+			border: none;
+			width: 100%;
+			margin-bottom: 20px;
+			background-color: rgba(255,255,255,0.8);
+			color: #333;
+			box-shadow: inset 0px 0px 5px rgba(0,0,0,0.3);
+		}
+		input[type="submit"] {
+			background-color: #4CAF50;
+			color: #fff;
+			padding: 10px 20px;
+			font-size: 16px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: background-color 0.3s ease-in-out;
+		}
+		input[type="submit"]:hover {
+			background-color: #3e8e41;
+		}
+	</style>
+</head>
+<body>
+	<form>
+		<h1>Contact Us</h1>
+		<label for="name">Name</label>
+		<input type="text" id="name" name="name" required>
+		<label for="email">Email</label>
+		<input type="email" id="email" name="email" required>
+		<label for="message">Message</label>
+		<textarea id="message" name="message" required></textarea>
+		<input type="submit" value="Submit">
+	</form>
+</body>
+<script>
+    function storeFormData() {
+      // Get the form data
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const message = document.getElementById('message').value;
+  
+      // Store the form data in local storage
+      localStorage.setItem('name', name);
+      localStorage.setItem('email', email);
+      localStorage.setItem('message', message);
+  
+      // Display a confirmation message
+      alert('Form data stored in local storage!');
+    }
+  </script>
+</html>
