@@ -60,23 +60,32 @@
 		<input type="email" id="email" name="email" required>
 		<label for="message">Message</label>
 		<textarea id="message" name="message" required></textarea>
-		<input type="submit" value="Submit">
+		<input type="submit" value="Submit" onclick="storeFormData()">
 	</form>
 </body>
 <script>
-    function storeFormData() {
-      // Get the form data
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const message = document.getElementById('message').value;
-  
-      // Store the form data in local storage
-      localStorage.setItem('name', name);
-      localStorage.setItem('email', email);
-      localStorage.setItem('message', message);
-  
-      // Display a confirmation message
-      alert('Form data stored in local storage!');
-    }
+   function storeFormData() {
+    // Get the form data
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const message = document.getElementById('message').value;
+
+    // Create an object with the form data
+    const formData = {
+      name: name,
+      email: email,
+      message: message
+    };
+
+    // Store the object in local storage as a JSON string
+    localStorage.setItem('formData', JSON.stringify(formData));
+
+    // Display a confirmation message
+    alert('Form data stored in local storage!');
+  }
+  const formData = JSON.parse(localStorage.getItem('formData'));
+  console.log(formData.name);
+console.log(formData.email);
+console.log(formData.message);
   </script>
 </html>
