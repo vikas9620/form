@@ -82,14 +82,18 @@
   const keyName = `user-${timestamp}`;
 
   // Store the object in local storage using the unique key name
-  localStorage.setItem(keyName, JSON.stringify(userData));
+  localStorage.setItem(keyName, JSON.stringify(formData));
 
     // Display a confirmation message
     alert('Form data stored in local storage!');
   }
-  const formData = JSON.parse(localStorage.getItem('formData'));
-  console.log(formData.name);
-console.log(formData.email);
-console.log(formData.message);
+  for (let i = 0; i < localStorage.length; i++) {
+  const keyName = localStorage.key(i);
+  const userData = JSON.parse(localStorage.getItem(keyName));
+  console.log(userData.name);
+  console.log(userData.email);
+  console.log(userData.message);
+}
+
   </script>
 </html>
