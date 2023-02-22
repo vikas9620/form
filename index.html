@@ -77,8 +77,12 @@
       message: message
     };
 
-    // Store the object in local storage as a JSON string
-    localStorage.setItem('formData', JSON.stringify(formData));
+     // Generate a unique key name using a timestamp
+  const timestamp = Date.now();
+  const keyName = `user-${timestamp}`;
+
+  // Store the object in local storage using the unique key name
+  localStorage.setItem(keyName, JSON.stringify(userData));
 
     // Display a confirmation message
     alert('Form data stored in local storage!');
