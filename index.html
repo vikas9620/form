@@ -34,7 +34,7 @@
 
       input[type="text"],
       input[type="email"],
-	  input[type="number"],
+	  input[type="tel"],
       textarea {
         width: 100%;
         padding: 0.5rem;
@@ -90,110 +90,103 @@
         background-color: #c82333;
       }
     </style>
-  </head>
+  </head> 
   <body>
-    <h1>Contact Us</h1>
-    <form id="contactForm">
+    <h1>Contact Form</h1>
+    <form id="contact-form">
       <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required>
+      <input type="text" id="name" name="name" required><br>
+
       <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required>
-      <label for="contact">Contact:</label>
-      <input type="number" id="contact" name="contact" required>
+      <input type="email" id="email" name="email" required><br>
+
+      <label for="phone">Phone:</label>
+      <input type="tel" id="phone" name="phone"><br>
+
+     
+
       <input type="submit" value="Submit">
     </form>
-    <div id="contactList"></div>
+
+    <h2>Contact List</h2>
+    <ul id="contact-list"></ul>
+
     <script>
-      // Retrieve data from local storage and render it on the page
-      renderDataFromLocalStorage();
+      // Retrieve saved contacts from local storage
+      let contacts = JSON.parse(localStorage.getItem('contacts')) || [];
 
-      // Add item to list on form submission
-      const form = document.getElementById('contactForm');
-      form.addEventListener('submit', addContactToList);
+      // Function to render the contact list
+      function renderContacts() {
+        // Clear the existing contact list
+        document.getElementById('contact-list').innerHTML = '';
 
-// Delete contact from list on button click
-const contactList = document.getElementById('contactList');
-contactList.addEventListener('click', removeContactFromList);
+        // Add each contact to the list
+        contacts.forEach(function(contact, index) {
+          let li = document.createElement('li');
+          li.textContent = contact.name + ' (' + contact.email + ')';
 
-function addContactToList(e) {
-  e.preventDefault();
+          let editBtn = document.createElement('button');
+          editBtn.textContent = 'Edit';
+          editBtn.addEventListener('click', function() {
+            // Move data to form for editing
+            document.getElementById('name').value = contact.name;
+            document.getElementById('email').value = contact.email;
+            document.getElementById('phone').value = contact.phone;
+          
 
-  // Get form data
-  const name = document.getElementById('name').value;
-  const email = document.getElementById('email').value;
-  const contact = document.getElementById('contact').value;
+            // Set the form's submit button to "Edit"
+            document.querySelector('#contact-form input[type="submit"]').value = 'Edit';
+            document.querySelector('#contact-form input[type="submit"]').dataset.index = index;
+          });
+          li.appendChild(editBtn);
 
-  // Create new contact object
-  const contactObj = {
-    name: name,
-    email: email,
-    contact: contact
-  };
+          let deleteBtn = document.createElement('button');
+          deleteBtn.textContent = 'Delete';
+          deleteBtn.addEventListener('click', function() {
+            // Remove contact from the list and local storage
+            contacts.splice(index, 1);
+            localStorage.setItem('contacts', JSON.stringify(contacts));
 
-  // Add contact to local storage
-  addContactToLocalStorage(contactObj);
+            // Re-render the contact list
+            renderContacts();
+          });
+          li.appendChild(deleteBtn);
 
-  // Add contact to list on the page
-  renderContactOnPage(contactObj);
+          document.getElementById('contact-list').appendChild(li);
+        });
+      }
 
-  // Clear form inputs
-  form.reset();
-}
+      // Render the initial contact list
+      renderContacts();
 
-function removeContactFromList(e) {
-  if (e.target.classList.contains('delete')) {
-    const contact = e.target.parentElement;
-    const contactName = contact.querySelector('.contact-name').innerText;
+      // Handle form submission
+      document.getElementById('contact-form').addEventListener('submit', function(event) {
+        event.preventDefault();
 
-    // Remove contact from local storage
-    removeContactFromLocalStorage(contactName);
+        // Get the form data
+        let formData = {
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value,
+          phone: document.getElementById('phone').value
+        };
 
-    // Remove contact from list on the page
-    contact.remove();
-  }
-}
+        // Add or update the contact in the list and local storage
+        let index = event.target.querySelector('input[type="submit"]').dataset.index;
+        if (index) {
+          contacts[index] = formData;
+        } else {
+          contacts.push(formData);
+        }
+        localStorage.setItem('contacts', JSON.stringify(contacts));
 
-function addContactToLocalStorage(contactObj) {
-  let contacts = [];
-  if (localStorage.getItem('contacts')) {
-    contacts = JSON.parse(localStorage.getItem('contacts'));
-  }
-  contacts.push(contactObj);
-  localStorage.setItem('contacts', JSON.stringify(contacts));
-}
+        // Clear the form
+        event.target.reset();
 
-function renderDataFromLocalStorage() {
-  let contacts = [];
-  if (localStorage.getItem('contacts')) {
-    contacts = JSON.parse(localStorage.getItem('contacts'));
-  }
-  contacts.forEach((contact) => renderContactOnPage(contact));
-}
-
-function removeContactFromLocalStorage(contactName) {
-  let contacts = [];
-  if (localStorage.getItem('contacts')) {
-    contacts = JSON.parse(localStorage.getItem('contacts'));
-  }
-  contacts = contacts.filter((contact) => contact.name !== contactName);
-  localStorage.setItem('contacts', JSON.stringify(contacts));
-}
-
-function renderContactOnPage(contactObj) {
-  const contactList = document.getElementById('contactList');
-
-  // Create list item
-  const li = document.createElement('li');
-  li.className = 'list-group-item';
-  li.innerHTML = `
-  <span class="contact-name">${contactObj.name}</span>
-    <span class="contact-email">${contactObj.email}</span>
-    <span class="contact-message">${contactObj.contact}</span>
-    <button class="delete btn btn-danger float-right">Delete</button>
-  `;
-
-// Add list item to list
-contactList.appendChild(li);
-} </script>
-</body>
+        // Set the form's submit button back to "Submit"
+        document.querySelector('#contact-form input[type="submit"]').value = 'Submit';
+        document.querySelector('#contact-form input[type="submit"]').removeAttribute('data-index');
+        renderContacts();
+      });
+    </script>
+  </body>
 </html>
