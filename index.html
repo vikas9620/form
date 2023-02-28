@@ -122,8 +122,10 @@
 
         // Add each contact to the list
         contacts.forEach(function(contact, index) {
+          if(contact){
           let li = document.createElement('li');
           li.textContent = contact.name + ' (' + contact.email + ')';
+        
 
           let editBtn = document.createElement('button');
           editBtn.textContent = 'Edit';
@@ -139,7 +141,7 @@
             document.querySelector('#contact-form input[type="submit"]').dataset.index = index;
           });
           li.appendChild(editBtn);
-
+        
           let deleteBtn = document.createElement('button');
           deleteBtn.textContent = 'Delete';
           deleteBtn.addEventListener('click', function() {
@@ -153,7 +155,7 @@
           li.appendChild(deleteBtn);
 
           document.getElementById('contact-list').appendChild(li);
-        });
+        }});
       }
 
       // Render the initial contact list
